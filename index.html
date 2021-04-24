@@ -18,7 +18,12 @@
 			<h1 class="mb-4 text-center">Registro de Nuevo Servicio</h1>
 			<br />
 
-			<form action="php/validaciones.php" method="POST" onsubmit="return validar();">
+			<form
+				action="php/validaciones.php"
+				method="POST"
+				onsubmit="return validar();"
+				enctype="multipart/form-data"
+			>
 				<div class="row">
 					<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
 						<label class="form-label">Nombre Completo: <small>*</small></label>
@@ -171,7 +176,7 @@
 					<div class="col">
 						<input
 							class="form-control"
-							accept="image/*,.pdf"
+							accept="image/png, image/jpeg"
 							type="file"
 							name="nm_foto"
 							id="id_foto"
@@ -190,7 +195,7 @@
 					<div class="col">
 						<input
 							class="form-control"
-							accept="image/*,.pdf"
+							accept="image/png, image/jpeg"
 							type="file"
 							name="nm_identificacion"
 							id="id_identificacion"
@@ -209,7 +214,7 @@
 					<div class="col">
 						<input
 							class="form-control"
-							accept="image/*,.pdf"
+							accept="image/png, image/jpeg"
 							type="file"
 							name="nm_comprobante"
 							id="id_comprobante"

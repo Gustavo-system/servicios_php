@@ -13,10 +13,10 @@ if(isset($_POST['submit'])){
 	$estado = isset($_POST['nm_estado']) ? mysqli_real_escape_string($conexion, $_POST['nm_estado']) : false;
 	$sobreEl = isset($_POST['nm_sobreEl']) ? mysqli_real_escape_string($conexion, $_POST['nm_sobreEl']) : false; 
 	
-	$foto = isset($_FILES["nm_foto"]["name"]);
-	$ident = isset($_FILES["nm_identificacion"]["name"]);
-	$comprobante = isset($_FILES["nm_comprobante"]["name"]);
-
+	$foto = $_FILES["nm_foto"];
+	// $ident = isset($_FILES["nm_identificacion"]["name"]);
+	// $comprobante = isset($_FILES["nm_comprobante"]["name"]);
+	
 	$errores = array();
 
 	if(!empty($user_name) && !is_numeric($user_name) && !preg_match("/[0-9]/", $user_name)){
@@ -25,6 +25,8 @@ if(isset($_POST['submit'])){
 		$nombre_validado = false;
 		$errores['username'] = "Nombre incorrecto, no puede estar vacio ni contener numeros";
 	}
+
+	//validar fecha
 
 	if(!empty($numero) && is_numeric($numero) && preg_match("/[0-9]/", $numero) && strlen($numero) == 10){
 		$numero_valido = true;
@@ -61,6 +63,29 @@ if(isset($_POST['submit'])){
 		$errores['estado'] = "selecciona un estado";
 	}
 
+
+	$ruta = "../registro/imagenes/";
+	$accepFiles = array("image/png", "image/jpg", "image/jpeg");
+	$limitSize = 100;
+
+	if(in_array($_FILES["nm_foto"]["type"], $accepFiles) && !empty($_FILES["nm_foto"])){
+		move_uploaded_file($_FILES["nm_foto"]["tmp_name"], $ruta.$user_name.$_FILES["nm_foto"]["name"]);
+	}else{
+		$errores['foto'] = "foto incorrecta, error!";
+	}
+
+	if(in_array($_FILES["nm_identificacion"]["type"], $accepFiles) && !empty($_FILES["nm_identificacion"])){
+		move_uploaded_file($_FILES["nm_identificacion"]["tmp_name"], $ruta.$user_name.$_FILES["nm_identificacion"]["name"]);
+	}else{
+		$errores['identificacion'] = "identificacion incorrecta, error!";
+	}
+
+	if(in_array($_FILES["nm_comprobante"]["type"], $accepFiles) && !empty($_FILES["nm_comprobante"])){
+		move_uploaded_file($_FILES["nm_comprobante"]["tmp_name"], $ruta.$user_name.$_FILES["nm_comprobante"]["name"]);
+	}else{
+		$errores['comprobante'] = "comprobante incorrecta, error!";
+	}
+
 	//validar si se selecciono un archivo
 
 
@@ -72,7 +97,7 @@ if(isset($_POST['submit'])){
 		$guardar_usuario = true;
 		// INSERTAR USUARIO EN LA TABLA USUARIOS DE LA DB
 		echo('formulario correcto');
-      // $sql = "INSERT INTO servicios VALUES(null, '$user_name', '$genero', '$fecha', '$numero', '$email', '$servicio', '$estado', '$foto', '$ident', '$comprobante', '$sobreEl')";
+      // $sql = "INSERT INTO registro_new_service VALUES(null, '".$user_name."')";
 
 	}else{
 		echo "<script>alert('UPS!!!... Lo lamento, problemas en el servidor');</script>";

@@ -76,6 +76,6 @@ if(isset($_POST['submit'])){
 
 	}else{
 		echo "<script>alert('UPS!!!... Lo lamento, problemas en el servidor');</script>";
-		//header('Location:../index.html');
+		header('Location:../index.html');
 	}
 }

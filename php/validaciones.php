@@ -12,11 +12,7 @@ if(isset($_POST['submit'])){
 	$servicio = isset($_POST['nm_servicio']) ? mysqli_real_escape_string($conexion, $_POST['nm_servicio']) : false;
 	$estado = isset($_POST['nm_estado']) ? mysqli_real_escape_string($conexion, $_POST['nm_estado']) : false;
 	$sobreEl = isset($_POST['nm_sobreEl']) ? mysqli_real_escape_string($conexion, $_POST['nm_sobreEl']) : false; 
-	
-	$foto = $_FILES["nm_foto"];
-	// $ident = isset($_FILES["nm_identificacion"]["name"]);
-	// $comprobante = isset($_FILES["nm_comprobante"]["name"]);
-	
+
 	$errores = array();
 
 	if(!empty($user_name) && !is_numeric($user_name) && !preg_match("/[0-9]/", $user_name)){
@@ -28,11 +24,13 @@ if(isset($_POST['submit'])){
 
 	//validar fecha
 
-	if(!empty($numero) && is_numeric($numero) && preg_match("/[0-9]/", $numero) && strlen($numero) == 10){
-		$numero_valido = true;
-	}else{
-		$numero_valido = false;
-		$errores['numero'] = "El numero Telefonico es incorrecto";
+	if($numero != ''){
+		if(!empty($numero) && is_numeric($numero) && preg_match("/[0-9]/", $numero) && strlen($numero) == 10){
+			$numero_valido = true;
+		}else{
+			$numero_valido = false;
+			$errores['numero'] = "El numero Telefonico es incorrecto";
+		}
 	}
 
 	if(!empty($email) && filter_var($email, FILTER_VALIDATE_EMAIL)){
@@ -63,44 +61,57 @@ if(isset($_POST['submit'])){
 		$errores['estado'] = "selecciona un estado";
 	}
 
-
 	$ruta = "../registro/imagenes/";
 	$accepFiles = array("image/png", "image/jpg", "image/jpeg");
 	$limitSize = 100;
 
 	if(in_array($_FILES["nm_foto"]["type"], $accepFiles) && !empty($_FILES["nm_foto"])){
-		move_uploaded_file($_FILES["nm_foto"]["tmp_name"], $ruta.$user_name.$_FILES["nm_foto"]["name"]);
+		move_uploaded_file($_FILES["nm_foto"]["tmp_name"], $ruta.$user_name."foto".$_FILES["nm_foto"]["name"]);
 	}else{
 		$errores['foto'] = "foto incorrecta, error!";
 	}
 
 	if(in_array($_FILES["nm_identificacion"]["type"], $accepFiles) && !empty($_FILES["nm_identificacion"])){
-		move_uploaded_file($_FILES["nm_identificacion"]["tmp_name"], $ruta.$user_name.$_FILES["nm_identificacion"]["name"]);
+		move_uploaded_file($_FILES["nm_identificacion"]["tmp_name"], $ruta.$user_name."identificacion".$_FILES["nm_identificacion"]["name"]);
 	}else{
 		$errores['identificacion'] = "identificacion incorrecta, error!";
 	}
 
 	if(in_array($_FILES["nm_comprobante"]["type"], $accepFiles) && !empty($_FILES["nm_comprobante"])){
-		move_uploaded_file($_FILES["nm_comprobante"]["tmp_name"], $ruta.$user_name.$_FILES["nm_comprobante"]["name"]);
+		move_uploaded_file($_FILES["nm_comprobante"]["tmp_name"], $ruta.$user_name."comprobante".$_FILES["nm_comprobante"]["name"]);
 	}else{
 		$errores['comprobante'] = "comprobante incorrecta, error!";
 	}
 
-	//validar si se selecciono un archivo
-
-
 	$guardar_usuario = false;
-
 	var_dump($errores);
-	
+
 	if(count($errores) == 0){
 		$guardar_usuario = true;
-		// INSERTAR USUARIO EN LA TABLA USUARIOS DE LA DB
-		echo('formulario correcto');
-      // $sql = "INSERT INTO registro_new_service VALUES(null, '".$user_name."')";
+      $sql = "INSERT INTO registro_new_service VALUES(
+			null,
+			'$user_name', 
+			'$genero', 
+			'$fecha',
+			'$numero', 
+			'$email',
+			'$servicio',
+			'$estado',
+			'".$_FILES['nm_foto']['name']."', 
+			'".$_FILES['nm_identificacion']['name']."', 
+			'".$_FILES['nm_comprobante']['name']."', 
+			'$sobreEl')";
+		$resultado = mysqli_query($conexion, $sql);
+		if ($resultado) {
+			header('Location:../success.html');
+	 	}
+		else{
+			echo("error...");
+			// header('Location:../index.html');
+		}
 
 	}else{
 		echo "<script>alert('UPS!!!... Lo lamento, problemas en el servidor');</script>";
-		header('Location:../index.html');
+		// header('Location:../index.html');
 	}
 }

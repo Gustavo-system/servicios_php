@@ -36,11 +36,14 @@ function validar() {
 	const r_foto = validarFile(foto, 'id_foto', 'error_foto');
 	const r_ident = validarFile(ident, 'id_identificacion', 'error_identificacion');
 	const r_comprobante = validarFile(comprobante, 'id_comprobante', 'error_comprobante');
+	const r_fecha = validarFecha(fecha);
+	console.log(r_fecha);
 
 	if (
 		r_nombre == -1 ||
 		r_numero == -1 ||
 		r_email == -1 ||
+		r_fecha == -1 ||
 		r_genero == -1 ||
 		r_servicio == -1 ||
 		r_estado == -1 ||
@@ -125,5 +128,38 @@ const validarFile = (el, idx, idStyle) => {
 		UI.alerta(`#${idx}`, 'is-invalid');
 		UI.error(`${idStyle}`);
 		return -1;
+	}
+};
+
+const validarFecha = (fecha) => {
+	let f = new Date();
+	let mes = (f.getMonth() + 1).toString();
+	let dia = f.getDate().toString();
+
+	if (mes.length == 1) {
+		mes = `0${mes}`;
+		console.log(mes);
+	}
+	if (dia.length == 1) {
+		dia = `0${dia}`;
+		console.log(dia);
+	}
+	const today = `${f.getFullYear()}-${mes}-${dia}`;
+	const min_date = '';
+	const min_edad = '';
+
+	if (fecha > today) {
+		UI.alerta('#id_date', 'is-invalid');
+		UI.error('error_fecha');
+		console.log('fecha mayor a la actual');
+		return -1;
+	} else if (fecha < '1700-12-12') {
+		UI.alerta('#id_date', 'is-invalid');
+		UI.error('error_fecha');
+		console.log('fecha menor a 100 años');
+		return -1;
+	} else {
+		UI.alerta('#id_date', 'is-valid');
+		UI.good('error_fecha');
 	}
 };

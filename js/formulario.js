@@ -138,11 +138,9 @@ const validarFecha = (fecha) => {
 
 	if (mes.length == 1) {
 		mes = `0${mes}`;
-		console.log(mes);
 	}
 	if (dia.length == 1) {
 		dia = `0${dia}`;
-		console.log(dia);
 	}
 	const today = `${f.getFullYear()}-${mes}-${dia}`;
 	const min_date = '';
@@ -151,12 +149,10 @@ const validarFecha = (fecha) => {
 	if (fecha > today) {
 		UI.alerta('#id_date', 'is-invalid');
 		UI.error('error_fecha');
-		console.log('fecha mayor a la actual');
 		return -1;
 	} else if (fecha < '1940-12-12') {
 		UI.alerta('#id_date', 'is-invalid');
 		UI.error('error_fecha');
-		console.log('fecha menor a 100 años');
 		return -1;
 	} else {
 		UI.alerta('#id_date', 'is-valid');

@@ -103,15 +103,15 @@ if(isset($_POST['submit'])){
 			'$sobreEl')";
 		$resultado = mysqli_query($conexion, $sql);
 		if ($resultado) {
-			header('Location:../success.html');
+			header('Location: views/success.php');
 	 	}
 		else{
 			echo("error...");
-			// header('Location:../index.html');
+			header('Location:../index.php');
 		}
 
 	}else{
 		echo "<script>alert('UPS!!!... Lo lamento, problemas en el servidor');</script>";
-		// header('Location:../index.html');
+		header('Location:../index.php');
 	}
 }

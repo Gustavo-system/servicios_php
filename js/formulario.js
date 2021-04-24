@@ -153,7 +153,7 @@ const validarFecha = (fecha) => {
 		UI.error('error_fecha');
 		console.log('fecha mayor a la actual');
 		return -1;
-	} else if (fecha < '1700-12-12') {
+	} else if (fecha < '1940-12-12') {
 		UI.alerta('#id_date', 'is-invalid');
 		UI.error('error_fecha');
 		console.log('fecha menor a 100 años');
